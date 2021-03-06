@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "pageLatency"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-e6g7me4xj4md"
+s3_prefix = "pageLatency"
+region = "us-east-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

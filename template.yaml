@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  pageLatencyTest
+
+  Sample SAM Template for pageLatencyTest
+
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  PageLatencyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: page_latency/
+      FunctionName: pageLatencyFunc
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        PageLatency:
+          Type: Api
+          Properties:
+            Path: /website
+            Method: post
+
+Outputs:
+  PageLatencyApi:
+    Description: "API Gateway endpoint URL for Prod stage for Page Latency function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/website/"
+  PageLatencyFunction:
+    Description: "A function that determines the loading time of web sites"
+    Value: !GetAtt PageLatencyFunction.Arn
+  PageLatencyFunctionIamRole:
+    Description: "Implicit IAM Role created for Page Latency function"
+    Value: !GetAtt PageLatencyFunctionRole.Arn
