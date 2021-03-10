@@ -1,7 +1,7 @@
 import json
 import time
 import asyncio
-from aiohttp import ClientSession, client_exceptions
+from aiohttp import ClientSession, client_exceptions, ClientTimeout
 
 
 def lambda_handler(event, context):
@@ -35,10 +35,13 @@ async def links_stack(links):
 async def define_time(session, link):
     try:
         page_time = 0
+        timeout = ClientTimeout(total=9)
         start = time.time()
-        async with await session.get(link):
+        async with await session.get(link, timeout=timeout):
             end = time.time()
             page_time += end - start
         return {link: page_time}
     except client_exceptions.ClientConnectionError:
         return {link: 'Connection Error'}
+    except asyncio.exceptions.TimeoutError:
+        return {link: 'Timeout Error'}
